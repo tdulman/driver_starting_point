@@ -30,6 +30,7 @@ with open('all_driver_starting_points.csv') as csvfile:
         except KeyError:
             starting_locations[SP_metro_id] = [[starting_point_latitude, starting_point_longtitude]]
 
+
     print(starting_locations)
 
 # def haversine(lon1, lat1, lon2, lat2):
