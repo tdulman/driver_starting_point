@@ -5,6 +5,10 @@ def haversine(lat1, lon1, lat2, lon2):
 
     lat1 = float(lat1)
     lat2 = lat2.rstrip("\n")
+    # print("lat1: " + str(lat1))
+    # print("lon1: " + str(lon1))
+    # print("lat2: " + str(lat2))
+    # print("lon2: " + str(lon2))
     lat2 = float(lat2)
     lon1 = float(lon1)
     lon2 = float(lon2)
@@ -32,9 +36,11 @@ with open('all_driver_starting_points.csv') as csvfile:
 
         try:
             starting_locations[SP_metro_id]
-            starting_locations[SP_metro_id].append([starting_point_latitude, starting_point_longtitude])
+            starting_locations[SP_metro_id].append([starting_point_id, [starting_point_latitude, starting_point_longtitude]])
         except KeyError:
-            starting_locations[SP_metro_id] = [[starting_point_latitude, starting_point_longtitude]]
+            starting_locations[SP_metro_id] = [starting_point_id, [starting_point_latitude, starting_point_longtitude]]
+        #print(starting_locations[SP_metro_id])
+
 
 
 with open('driver_info.csv') as csvfile:
@@ -47,16 +53,16 @@ with open('driver_info.csv') as csvfile:
         driver_longtitude = row[3]
         driver_rating = row[4]
         try:
-            starting_locs = starting_locations[metro_id]
+            #print("starting_locs: " + str(starting_locations[metro_id][1]))
+            starting_locs = [starting_locations[metro_id][1]]
             #print("starting_locs: " + str(starting_locs))
             min_distance = 9000000000000
             for start_loc in starting_locs:
-                # print(metro_id)
-                # print(start_loc)
+                #print("start_loc: " + str(start_loc))
                 distance = haversine(driver_latitude, driver_longtitude, start_loc[0], start_loc[1])
                 if distance < min_distance:
                     min_distance = distance
-            print("for driver " + str(user_id) + " minimum distance is " + str(min_distance))
+            print("for driver " + str(user_id) + " minimum distance is " + str(min_distance) + " from starting location " + str(starting_locations[metro_id][0]))
 
         except KeyError:
             print("omg fam we don't have this Driver Users Metro ID in the starting locations file! " + metro_id)
